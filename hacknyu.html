@@ -1,0 +1,957 @@
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HackNYU</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        :root {
+            --peach: #FFCC99;
+            --mint: #98E4D6;
+            --sky: #B8D4E3;
+            --pink: #FFB3D9;
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray: #666666;
+            --light-gray: #f5f5f5;
+            --border-gray: #e5e5e5;
+            --blue: #0B5CD5;
+            --lime: #DBFA09;
+            --orange: #F95620;
+            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+            --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--black);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 12px;
+            height: 12px;
+            background: var(--black);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.3s ease, height 0.3s ease, transform 0.2s ease;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            mix-blend-mode: exclusion;
+        }
+
+        .cursor::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .cursor.link-hover {
+            transform: translate(-50%, -50%) scale(3);
+            opacity: 0.5;
+        }
+
+        .cursor.design-hover {
+            width: 100px;
+            height: 100px;
+            background: var(--lime);
+            mix-blend-mode: normal;
+        }
+
+        .cursor.design-hover .cursor-text {
+            display: block;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-gray);
+            transition: all 0.6s var(--ease-out-expo);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--black);
+            text-decoration: none;
+            transition: transform 0.3s var(--ease-out-expo);
+            cursor: pointer;
+        }
+
+        .logo:hover {
+            transform: translateX(5px);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 15px 40px;
+            background: var(--black);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s var(--ease-out-expo);
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+            background: var(--black);
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(60px, 10vw, 140px);
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 20px;
+            letter-spacing: -4px;
+            line-height: 0.9;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s var(--ease-out-expo) 0.2s forwards;
+            text-transform: uppercase;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(20px, 3vw, 28px);
+            color: var(--white);
+            margin-bottom: 40px;
+            font-weight: 400;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s var(--ease-out-expo) 0.4s forwards;
+        }
+
+        .hero-tags {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s var(--ease-out-expo) 0.6s forwards;
+        }
+
+        .tag {
+            padding: 10px 24px;
+            background: var(--lime);
+            color: var(--black);
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* Animated Background Elements */
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .bg-element {
+            position: absolute;
+            font-size: 200px;
+            font-weight: 900;
+            opacity: 0.05;
+            color: var(--white);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-element:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .bg-element:nth-child(2) {
+            bottom: 10%;
+            right: 5%;
+            animation-delay: 7s;
+        }
+
+        .bg-element:nth-child(3) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 300px;
+            animation-delay: 14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Content Sections */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            padding: 100px 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s var(--ease-out-expo);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section h2 {
+            font-size: clamp(36px, 6vw, 48px);
+            font-weight: 300;
+            margin-bottom: 40px;
+            letter-spacing: -2px;
+        }
+
+        .section p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--gray);
+            margin-bottom: 24px;
+            font-weight: 300;
+            max-width: 800px;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--orange);
+            color: var(--black);
+            padding: 80px 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            min-height: 200px;
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--white);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-number {
+            font-size: 56px;
+            font-weight: 900;
+            color: var(--black);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 18px;
+            color: var(--black);
+            font-weight: 500;
+        }
+
+        /* Design Showcase */
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+            justify-items: center;
+        }
+
+        .showcase-grid .showcase-item:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+            max-width: 350px;
+        }
+
+        .showcase-item {
+            background: var(--light-gray);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            height: 400px;
+            width: 100%;
+            max-width: 100%;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+
+        .showcase-item:hover {
+            transform: scale(1.02);
+            border-color: var(--lime);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .showcase-label {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: var(--black);
+            color: var(--white);
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        /* Full Width Showcase */
+        .fullwidth-showcase {
+            margin: 80px 0;
+            position: relative;
+            height: 600px;
+            background: var(--light-gray);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fullwidth-showcase h3 {
+            font-size: 48px;
+            color: var(--gray);
+            text-align: center;
+            letter-spacing: -2px;
+        }
+
+        /* Process Section */
+        .process-section {
+            background: var(--blue);
+            color: var(--white);
+        }
+
+        .process-section h2 {
+            color: var(--white);
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            align-items: start;
+            justify-items: center;
+        }
+
+        .process-grid .process-card:last-child:nth-child(odd) {
+            grid-column: auto;
+            max-width: 100%;
+        }
+
+        .process-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            width: 100%;
+            max-width: 100%;
+            min-height: 320px; /* Or any value that fits your content visually */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .process-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--lime);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .process-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: var(--lime);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: var(--black);
+        }
+
+        .process-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .process-card p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0;
+        }
+
+        /* Tools Section */
+        .tools-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .tool-badge {
+            padding: 14px 32px;
+            background: var(--lime);
+            color: var(--black);
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tool-badge:hover {
+            transform: translateY(-3px);
+            background: var(--black);
+            color: var(--lime);
+        }
+
+        /* Footer Navigation */
+        .footer-nav {
+            margin-top: 120px;
+            padding: 60px 20px;
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .footer-nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-nav .back-button {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .next-project {
+            text-align: right;
+        }
+
+        .next-project span {
+            display: block;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 8px;
+        }
+
+        .next-project a {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--white);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .next-project a:hover {
+            transform: translateX(10px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .cursor {
+                display: none;
+            }
+
+            * {
+                cursor: auto;
+            }
+
+            .nav-container {
+                padding: 15px 20px;
+            }
+
+            .hero {
+                padding: 60px 20px;
+                min-height: 70vh;
+            }
+
+            .hero h1 {
+                font-size: clamp(48px, 12vw, 80px);
+            }
+
+            .section h2 {
+                font-size: clamp(36px, 10vw, 60px);
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .showcase-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-nav-content {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .next-project {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Navigation -->
+    <div class="nav-container" id="navbar">
+        <nav>
+            <a href="home.html" class="logo">Vandana</a>
+            <a href="home.html#works" class="back-button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back to Projects
+            </a>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="bg-element">2024</div>
+            <div class="bg-element">Tech</div>
+            <div class="bg-element">09.20</div>
+        </div>
+        <div class="hero-content">
+            <h1>HackNYU</h1>
+            <p class="subtitle">Complete Visual Identity for NYU's Premier Hackathon</p>
+            <div class="hero-tags">
+                <span class="tag">Brand Identity</span>
+                <span class="tag">Social Media</span>
+                <span class="tag">Merchandise Design</span>
+                <span class="tag">Event Graphics</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">600+</div>
+                <div class="stat-label">Participants</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">48HR</div>
+                <div class="stat-label">Hackathon</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Design Assets</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Sponsors</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section class="section container">
+        <h2>Overview</h2>
+        <p>Designed the full visual identity for HackNYU, with Google as one of the sponsors, hackathon with 600+ participants. Using Figma, Illustrator, Procreate and Photoshop, I crafted vibrant t-shirts, stickers, signage, and digital assets that captured the event's energy and theme.</p>
+        <p>I collaborated with cross-functional teams to ensure consistent branding across social media, registration, and on-site experience. The final designs elevated the event's presence, boosted attendee engagement, and strengthened HackNYU's brand recognition within the tech community.</p>
+    </section>
+
+    <!-- T-Shirt Design Section -->
+    <section class="section container">
+  <h2>T-Shirt Design</h2>
+  <p>Created eye-catching t-shirt and hoodie designs that participants proudly wore during and after the event.</p>
+  <div class="showcase-grid">
+    <div class="showcase-item">
+      <img src="images/Hack/hacknyu_hoodie.png" alt="Front Design" style="width:100%; height: 100%; display:block;">
+      <span class="showcase-label">Hoodie Design - front</span>
+    </div>
+    <div class="showcase-item">
+      <img src="images/Hack/hacknyuhoodie.png" alt="Back Design" style="width:100%; height: 100%; display:block;">
+      <span class="showcase-label">Hoodie Design - back</span>
+    </div>
+  </div>
+</section>
+
+    <!-- Full Width Showcase -->
+    <div class="fullwidth-showcase">
+  <img src="images/Hack/HackNYUtshirt.png" alt="Full T-Shirt Mockup" style="width:100%; height:auto; display:block;">
+</div>
+
+
+    <!-- Sticker & Badge Design -->
+    <section class="section container">
+  <h2>Stickers, ID Tags & Badges</h2>
+  <p>Designed a collection of collectible stickers and badges along with ID Card design that became instant favorites among participants.</p>
+  <div class="showcase-grid">
+    <div class="showcase-item">
+      <img src="images/Hack/hacknyuStickers.png" alt="Sticker Set 1" style="width:100%; height:100%; display:block;">
+      <span class="showcase-label">Sticker Set 1</span>
+    </div>
+    <div class="showcase-item">
+      <img src="images/Hack/hackstickers.png" alt="Sticker Set 2" style="width:100%; height:100%; display:block;">
+      <span class="showcase-label">Sticker Set 2</span>
+    </div>
+    <div class="showcase-item">
+      <img src="images/Hack/badgehacknyu.png" alt="Badge Design" style="width:100%; height:100%; display:block;">
+      <span class="showcase-label">Badge Design</span>
+    </div>
+    <div class="showcase-item">
+      <img src="images/Hack/ID_1.png" alt="ID Card Design" style="width:100%; height:100%; display:block;">
+      <span class="showcase-label">ID Card Design</span>
+    </div>
+  </div>
+</section>
+
+
+    <!-- Social Media Section -->
+    <section class="section container">
+  <h2>Social Media Campaign & Tote Bag Design</h2>
+  <p>Developed a cohesive social media presence that drove registration and engagement across platforms. Additionally, I also designed for the tote bag which were given to the participants.</p>
+  <div class="showcase-grid">
+    <div class="showcase-item">
+      <img src="images/Hack/hacknyu_socials.png" alt="Instagram Post" style="width:100%; height:100%; display:block;">
+      <span class="showcase-label">Instagram Post</span>
+    </div>
+    <div class="showcase-item">
+      <img src="images/Hack/instastory.png" alt="Story Template" style="width:100%; height:100%; display:block;">
+      <span class="showcase-label">Story Template</span>
+    </div>
+    <div class="showcase-item">
+      <img src="images/Hack/LinkedIn.png" alt="LinkedIn Cover" style="width:100%; height:100%; display:block;">
+      <span class="showcase-label">LinkedIn Cover</span>
+    </div>
+    <div class="showcase-item">
+      <img src="images/Hack/hacknyu_totebag.png" alt="Tote Bag Design" style="width:100%; height:100%; display:block;">
+      <span class="showcase-label">Tote Bag</span>
+    </div>
+    </div>
+  </div>
+</section>
+
+
+    <!-- Signage Section -->
+    <section class="section container">
+        <h2>Event Signage</h2>
+        <p>Created comprehensive wayfinding and informational signage for the venue.</p>
+        <div class="fullwidth-showcase">
+  <img src="images/Hack/signage.png" alt="Signage System Display" style="width:100%; height:auto; display:block;">
+</div>
+
+    </section>
+
+    <!-- Process Section -->
+    <section class="section process-section">
+        <div class="container">
+            <h2>Design Process</h2>
+            <div class="process-grid">
+                <div class="process-card">
+                    <div class="process-icon">🎯</div>
+                    <h3>Concept Development</h3>
+                    <p>Explored themes that represented innovation, collaboration, and NYU's spirit</p>
+                </div>
+                <div class="process-card">
+                    <div class="process-icon">🎨</div>
+                    <h3>Visual Exploration</h3>
+                    <p>Created multiple design directions balancing tech aesthetics with accessibility</p>
+                </div>
+                <div class="process-card">
+                    <div class="process-icon">✨</div>
+                    <h3>Refinement</h3>
+                    <p>Iterated based on stakeholder feedback and production constraints</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="section container">
+        <h2>Tools & Techniques</h2>
+        <div class="tools-grid">
+            <span class="tool-badge">Adobe Illustrator</span>
+            <span class="tool-badge">Procreate</span>
+            <span class="tool-badge">Photoshop</span>
+            <span class="tool-badge">Figma</span>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="section container">
+        <h2>Impact</h2>
+        <p>The comprehensive visual identity created for HackNYU significantly elevated the event's professional presence and participant experience. The cohesive branding across all touchpoints—from digital registration to physical merchandise—created a memorable experience that participants continued to share on social media long after the event.</p>
+        <p>The designs not only served their functional purpose but also became coveted items, with participants actively collecting stickers and proudly wearing the event merchandise, extending HackNYU's brand reach throughout the tech community.</p>
+    </section>
+
+    <!-- Footer Navigation -->
+    <footer class="footer-nav">
+        <div class="footer-nav-content">
+            <a href="index.html" class="back-button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back to Home
+            </a>
+            <div class="next-project">
+                <span>Next Project</span>
+                <a href="illustrations.html">Illustrations →</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Smooth cursor animation with lag
+        function animateCursor() {
+            const speed = 0.15;
+            
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Cursor hover effects
+        const links = document.querySelectorAll('a, button');
+
+        links.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                cursor.classList.add('link-hover');
+            });
+            
+            link.addEventListener('mouseleave', () => {
+                cursor.classList.remove('link-hover');
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax effect for hero shapes
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const shapes = document.querySelectorAll('.bg-shape');
+            
+            shapes.forEach((shape, index) => {
+                const speed = 0.5 * (index + 1);
+                shape.style.transform = `translateY(${scrolled * speed * 0.1}px)`;
+            });
+        });
+
+        // Animate stat numbers
+        const animateNumbers = () => {
+            const numbers = document.querySelectorAll('.stat-number');
+            numbers.forEach(num => {
+                const text = num.innerText;
+                if (!num.classList.contains('animated') && num.getBoundingClientRect().top < window.innerHeight) {
+                    num.classList.add('animated');
+                    
+                    if (text.includes('+')) {
+                        const value = parseInt(text);
+                        let current = 0;
+                        const increment = value / 50;
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= value) {
+                                current = value;
+                                clearInterval(timer);
+                                num.innerText = value + '+';
+                            } else {
+                                num.innerText = Math.floor(current) + '+';
+                            }
+                        }, 30);
+                    }
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateNumbers);
+        animateNumbers();
+
+        // Add hover effect to cards
+        document.querySelectorAll('.stat-card, .process-card, .showcase-item').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Stagger animations for showcase items
+        const showcaseItemsAnim = document.querySelectorAll('.showcase-item');
+        showcaseItemsAnim.forEach((item, index) => {
+            item.style.transitionDelay = `${index * 0.1}s`;
+        });
+
+        // Add tilt effect to process cards
+        document.querySelectorAll('.process-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+            });
+        });
+    </script>
+</body>
+</html>
